@@ -9,7 +9,7 @@
  * @package SambaTech_Liquid
  * @author Bruno Thiago Leite Agutoli <brunotla1@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @link http://ipcmedia.com
+ * @link http://docs.liquidplatform.com/
  */
 
 /**
