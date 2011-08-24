@@ -6,10 +6,10 @@
  * PHP version 5
  *
  * @category Media
- * @package SambaTech_Liquid
- * @author Bruno Thiago Leite Agutoli <brunotla1@gmail.com>
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @link http://docs.liquidplatform.com/
+ * @package  SambaTech_Liquid
+ * @author   Bruno Thiago Leite Agutoli <brunotla1@gmail.com>
+ * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @link     http://docs.liquidplatform.com/
  */
 
 /**
@@ -17,10 +17,11 @@
  * o serviço de gestão e distribuição de vídeos online da SambaTech.
  *
  * @category Media
- * @package SambaTech_Liquid
- * @author Bruno Thiago Leite Agutoli <brunotla1@gmail.com>
- * @version $Id$
- * @since 23/08/2011
+ * @package  SambaTech_Liquid
+ * @author   Bruno Thiago Leite Agutoli <brunotla1@gmail.com>
+ * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @version  Release: 1.0
+ * @link     http://docs.liquidplatform.com/
  */
 class Webcast
 {
@@ -39,8 +40,8 @@ class Webcast
     const API_VERSION = '2.0';
 
     /**
-     *  Chave de acesso a api.
-     *  
+     * Chave de acesso a api.
+     * 
      * @var string $api_key
      */
     private $_api_key;
@@ -50,18 +51,24 @@ class Webcast
      * 
      * @var array $_cache
      */
-    protected $_memoryCache = array();
+    private $_memoryCache = array();
 
     /**
-     * Construtor da classe 
+     * Construtor da classe
      * 
      * @param string $api_Key (obrigatório)
+     * 
      * @return void
      * @access public
      */
-    public function __construct( $api_Key ) {
-        if ( ! extension_loaded('curl') ) return false;
-        if ( empty($api_Key) ) return false;
+    public function __construct( $api_Key )
+    {
+        if ( ! extension_loaded('curl') ) {
+            return false;
+        }
+        if ( empty($api_Key) ) {
+            return false;
+        }
         $this->_api_key = $api_Key;
     }
 
@@ -70,15 +77,17 @@ class Webcast
      * habilita o modo debug e false 
      * desabilita
      * 
-     * @return void
-     * @param boolean $display
+     * @param boolean $display (obrigatório)
+     * 
+     * @return void null
      * @access public
      */
-    public function debug( $display ) {
+    public function debug( $display )
+    {
         if ( $display ) {
             error_reporting(E_ALL);
         }
-        ini_set( "display_errors", $display );
+        ini_set("display_errors", $display);
     }
 
     /**
@@ -89,17 +98,18 @@ class Webcast
      * 50 resultados basta realizar uma “paginação”, através 
      * dos parâmetros first e limit.
      * 
-     * No cabeçalho ele contém o parâmetro “totalMedias” com o total de mídias 
-     * selecionadas naquela requisição, levando em consideração os 
-     * filtros aplicados.
+     * No cabeçalho ele contém o parâmetro “totalMedias” com o total 
+     * de mídias selecionadas naquela requisição, levando em consideração 
+     * os filtros aplicados.
      * 
      * @return mixed 
      * @link http://docs.liquidplatform.com/2010/09/medias/
      * @access public
      */
-    public function medias() {
+    public function medias() 
+    {
         $url = $this->_apiUrl() . '/medias/?key=' . $this->_api_key;
-        return $this->_get( $url );
+        return $this->_get($url);
     }
 
     /**
@@ -110,9 +120,10 @@ class Webcast
      * @link http://docs.liquidplatform.com/2010/09/mediascount/
      * @access public
      */
-    public function mediasCount() {
+    public function mediasCount() 
+    {
         $url = $this->_apiUrl() .'/medias/count/?key=' . $this->_api_key;
-        return $this->_get( $url );
+        return $this->_get($url);
     }
 
     /**
@@ -124,17 +135,20 @@ class Webcast
      * 
      * A lista é ordenada pelo número total de votos das mídias.
      * 
-     * @param array $options (opcional)
+     * @param array $options opcional
+     * 
      * @return mixed objects array
      * @link http://docs.liquidplatform.com/2010/09/mediasratings/
      * @access public
      */
-    public function mediasRatings( $options = array() ) {
+    public function mediasRatings( $options = array() ) 
+    {
         $queryString = $this->_toQueryStr($options);
         $url = $this->_apiUrl() .'/medias/ratings/?key=' . $this->_api_key;
-        if ( ! empty($queryString) ) 
+        if ( ! empty($queryString) ) { 
              $url .= $this->_toQueryStr($options);
-        return $this->_get( $url );
+        }
+        return $this->_get($url);
     }
 
     /**
@@ -143,7 +157,8 @@ class Webcast
      * data passada como parâmetro no campo lastModified.
      * A lista é ordenada pelo número total de visualizações das mídias.
      * 
-     * @param mixed array $options (opcional)
+     * @param array $options (opcional)
+     * 
      * @example array(
      *      'first' => 0,
      *      'limit' => 10
@@ -151,12 +166,14 @@ class Webcast
      * @return mixed objects array
      * @access public
      */
-    public function mediasViews( $options = array() ) {
+    public function mediasViews( $options = array() ) 
+    {
         $queryString = $this->_toQueryStr($options);
         $url = $this->_apiUrl() .'/medias/views/?key=' . $this->_api_key;
-        if ( ! empty($queryString) ) 
+        if ( ! empty($queryString) ) {
              $url .= $this->_toQueryStr($options);
-        return $this->_get( $url );
+        }
+        return $this->_get($url);
     }
 
     /**
@@ -171,19 +188,22 @@ class Webcast
      * 
      * ex. filter=campo1;campo2;campo3
      * 
-     * @param string $mediaId
-     * @param string $filter (opcional)
+     * @param string $mediaId (obrigatório)
+     * @param string $filter  (opcional)
+     * 
      * @return mixed objects array
      * @link http://docs.liquidplatform.com/2010/09/mediasmediaid/
      * @access public
      */
-    public function getMediaById( $mediaId , $filter = '' ) {
+    public function getMediaById( $mediaId , $filter = '' ) 
+    {
         $queryString = $this->_toQueryStr($options);
         $url = $this->_apiUrl() .'/medias/'. $mediaId 
                     .'/?key=' . $this->_api_key;
-        if ( ! empty($queryString) ) 
+        if ( ! empty($queryString) ) {
              $url .= $this->_toQueryStr($options);
-        return $this->_get( $url );
+        }
+        return $this->_get($url);
     }
 
     /**
@@ -193,15 +213,17 @@ class Webcast
      * que correspondem à diferentes versões daquela mídia. 
      * Cada MediaFile possui um mediaFileId.
      * 
-     * @param string $mediaFileId
+     * @param string $mediaFileId (obrigatório)
+     * 
      * @return mixed objects array
      * @link http://docs.liquidplatform.com/2010/09/mediasurlsmediafileid/
      * @access public
      */
-    public function getMediaUrlsByFileId( $mediaFileId ) {
+    public function getMediaUrlsByFileId( $mediaFileId ) 
+    {
         $url = $this->_apiUrl() .'/medias/urls/'. $mediaFileId 
                     .'/?key=' . $this->_api_key;
-        return $this->_get( $url );
+        return $this->_get($url);
     }
 
     /**
@@ -212,35 +234,40 @@ class Webcast
      * assistida, através do parâmetro quarter.
      * 
      * @param string $mediaFileId (obrig)
-     * @param array $options (obrig)
+     * @param array  $options     (obrig)
+     * 
      * @access public
      * @link http://docs.liquidplatform.com/2010/09/mediasviewsmediafileid/
      */
     /*public function getMediaViewsByFileId( $mediaFileId, $options ) {
         $queryString = $this->_toQueryStr($options);
-        $url = $this->_apiUrl() .'/medias/views/'. $mediaFileId .'/?key=' . $this->_api_key;
+        $url = $this->_apiUrl() .'/medias/views/'. $mediaFileId 
+        			.'/?key=' . $this->_api_key;
         if ( ! empty($queryString) ) 
              $url .= $this->_toQueryStr($options);
-        return $this->_get( $url );
+        return $this->_get($url);
     }*/
     
     /**
      * Retorna um objeto RatingSummary, que representa um resumo 
      * das informações de votos da mídia identificada pelo mediaId.
      * 
-     * @param string $mediaId
-     * @param array $options (opcional)
+     * @param string $mediaId (obrigatório)
+     * @param array  $options (opcional)
+     * 
      * @return mixed objects array
      * @access public
      * @link http://docs.liquidplatform.com/2010/09/mediasmediaidrating/
      */
-    public function getMediaRatingById( $mediaId, $options = array() ) {
+    public function getMediaRatingById( $mediaId, $options = array() ) 
+    {
         $queryString = $this->_toQueryStr($options);
         $url = $this->_apiUrl() .'/medias/'. $mediaId 
                     .'/rating/?key=' . $this->_api_key;
-        if ( ! empty($queryString) ) 
+        if ( ! empty($queryString) ) {
              $url .= $this->_toQueryStr($options);
-        return $this->_get( $url );
+        }
+        return $this->_get($url);
     }
 
     /**
@@ -250,19 +277,22 @@ class Webcast
      * 
      * Esta lista é ordenada por ordem de relevância.
      * 
-     * @param string $mediaId
-     * @param array $options (opcional)
+     * @param string $mediaId (obrigatório)
+     * @param array  $options (opcional)
+     * 
      * @return mixed objects array
      * @link http://docs.liquidplatform.com/2010/09/mediasmediaidrelated/
      * @access public
      */
-    public function getMediaRelatedById( $mediaId, $options = array() ) {
+    public function getMediaRelatedById( $mediaId, $options = array() ) 
+    {
         $queryString = $this->_toQueryStr($options);
         $url = $this->_apiUrl() .'/medias/'. $mediaId 
                     .'/related/?key=' . $this->_api_key;
-        if ( ! empty($queryString) ) 
+        if ( ! empty($queryString) ) {
              $url .= $this->_toQueryStr($options);
-        return $this->_get( $url );
+        }
+        return $this->_get($url);
     }
 
     /**
@@ -271,19 +301,22 @@ class Webcast
      * Observação: Não assuma qualquer tipo de ordenação da lista se não 
      * for usado ou não existir um parâmetro para ordenar o resultado.
      * 
-     * @param string $mediaId
-     * @param array $options
+     * @param string $mediaId (obrigatório)
+     * @param array  $options (opcional)
+     * 
      * @return mixed objects array
-     * @access public
      * @link http://docs.liquidplatform.com/2010/09/mediasmediaidthumbs/
+     * @access public
      */
-    public function getMediaThumbsById( $mediaId, $options = '' ) {
+    public function getMediaThumbsById( $mediaId, $options = '' ) 
+    {
         $queryString = $this->_toQueryStr($options);
         $url = $this->_apiUrl() .'/medias/'. $mediaId 
                     .'/thumbs/?key=' . $this->_api_key;
-        if ( ! empty($queryString) ) 
+        if ( ! empty($queryString) ) {
              $url .= $this->_toQueryStr($options);
-        return $this->_get( $url );
+        }
+        return $this->_get($url);
     }
 
     /**
@@ -293,15 +326,17 @@ class Webcast
      * (MediaFiles) desta mídia. Caso não existam views, 
      * é retornado um SimpleResult com o valor 0.
      * 
-     * @param string $mediaId
+     * @param string $mediaId (obrigatório)
+     * 
      * @return mixed objects array
      * @link http://docs.liquidplatform.com/2010/09/mediasmediaidviews/
      * @access public
      */
-    public function getMediaViewsById( $mediaId ) {
+    public function getMediaViewsById( $mediaId ) 
+    {
         $url = $this->_apiUrl() .'/medias/'. $mediaId 
                     .'/views/?key=' . $this->_api_key;
-        return $this->_get( $url );
+        return $this->_get($url);
     }
 
     /**
@@ -312,16 +347,19 @@ class Webcast
      * que correspondem à diferentes versões daquela mídia. 
      * Cada MediaFile é identificado por um outputName.
      * 
-     * @param string $mediaId
-     * @param string $outputName
+     * @param string $mediaId    (obrigatório)
+     * @param string $outputName (obrigatório)
+     * 
      * @return mixed objects array
-     * @link http://docs.liquidplatform.com/2010/09/mediasurlsmediaidoutputname/
+     * @link 
+     * http://docs.liquidplatform.com/2010/09/mediasurlsmediaidoutputname/
      * @access public
      */
-    public function getMediaUrlsByIdAndOutputName( $mediaId, $outputName ) {
+    public function getMediaUrlsByIdAndOutputName( $mediaId, $outputName ) 
+    {
         $url = $this->_apiUrl() .'/medias/urls/'. $mediaId 
                    .'/'. $outputName .'/?key=' . $this->_api_key;
-        return $this->_get( $url );
+        return $this->_get($url);
     }
 
     /**
@@ -332,20 +370,24 @@ class Webcast
      * Este método permite que seja registrada a porcentagem 
      * da mídia assistida, através do parâmetro quarter.
      * 
-     * @param string $mediaId
-     * @param string $outputName
-     * @param array $options
+     * @param string $mediaId    (obrigatório)
+     * @param string $outputName (obrigatório)
+     * @param array  $options    (obrigatório)
+     * 
      * @return mixed objects array
      * @link http://docs.liquidplatform.com/2010/09/mediasmediaidviewsoutputname/
      * @access public
      */
-    public function getMediaViewsByIdAndOutputName( $mediaId, $outputName, $options) {
+    public function getMediaViewsByIdAndOutputName( $mediaId, $outputName, 
+        $options 
+    ) {
         $queryString = $this->_toQueryStr($options);
         $url = $this->_apiUrl() .'/medias/'. $mediaId 
                    .'/views/'. $outputName .'/?key=' . $this->_api_key;
-        if ( ! empty($queryString) ) 
+        if ( ! empty($queryString) ) {
              $url .= $this->_toQueryStr($options);
-        return $this->_get( $url );
+        }
+        return $this->_get($url);
     }
 
     
@@ -354,17 +396,20 @@ class Webcast
      * todos os canais cadastrados no projeto identificado 
      * pelo parâmetro key.
      * 
-     * @param void
+     * @param array $options (opcional)
+     * 
      * @return mixed objects array
      * @link http://docs.liquidplatform.com/2010/09/channels/
      * @access public
      */
-    public function channels( $options = '' ) {
+    public function channels( $options = array() )
+    {
         $queryString = $this->_toQueryStr($options);
         $url = $this->_apiUrl() .'/channels/?key=' . $this->_api_key;
-        if ( ! empty($queryString) ) 
+        if ( ! empty($queryString) ) {
              $url .= $this->_toQueryStr($options);
-        return $this->_get( $url );
+        }
+        return $this->_get($url);
     }
     
     /**
@@ -372,14 +417,14 @@ class Webcast
      * key passada como parâmetro. Caso não existam canais, 
      * é retornado um SimpleResult com o valor 0.
      * 
-     * @param void
      * @return mixed objects array
      * @link http://docs.liquidplatform.com/2010/09/channelscount/
      * @access public
      */
-    public function channelsCount() {
+    public function channelsCount()
+    {
         $url = $this->_apiUrl() .'/channels/count/?key=' . $this->_api_key;
-        return $this->_get( $url );
+        return $this->_get($url);
     }
 
 
@@ -393,19 +438,22 @@ class Webcast
      * lista de campos, separados por “ponto e vírgula”:
      *  ex:  filter=campo1;campo2;campo3
      * 
-     * @param string $channelId
-     * @param array $options
+     * @param string $channelId (obrigatório)
+     * @param array  $options   (opcional)
+     * 
      * @return mixed objects array
      * @link http://docs.liquidplatform.com/2010/09/channelschannelid/
      * @access public
      */
-    public function getChannelById( $channelId, $options = array() ) {
+    public function getChannelById( $channelId, $options = array() )
+    {
         $queryString = $this->_toQueryStr($options);
         $url = $this->_apiUrl() .'/channels/'. $channelId 
                     .'/?key=' . $this->_api_key;
-        if ( ! empty($queryString) ) 
+        if ( ! empty($queryString) ) {
              $url .= $this->_toQueryStr($options);
-        return $this->_get( $url );
+        }
+        return $this->_get($url);
     }
 
     /**
@@ -416,9 +464,10 @@ class Webcast
      * @link http://docs.liquidplatform.com/2010/09/outputs/
      * @access public
      */
-    public function outputs() {
+    public function outputs()
+    {
         $url = $this->_apiUrl() .'/outputs/?key=' . $this->_api_key;
-        return $this->_get( $url );
+        return $this->_get($url);
     }
 
     /**
@@ -432,9 +481,10 @@ class Webcast
      * @link http://docs.liquidplatform.com/2011/05/reportdetailtraffic/
      * @access public
      */
-    public function getReportDetailTraffic() {
+    public function getReportDetailTraffic()
+    {
         $url = $this->_apiUrl() .'/report/detail/traffic/?key=' . $this->_api_key;
-        return $this->_get( $url );
+        return $this->_get($url);
     }
 
     /**
@@ -448,9 +498,10 @@ class Webcast
      * @link http://docs.liquidplatform.com/2011/05/reportdetailmedias/
      * @access public
      */
-    public function getReportDetailMedias() {
+    public function getReportDetailMedias()
+    {
         $url = $this->_apiUrl() .'/report/detail/medias/?key=' . $this->_api_key;
-        return $this->_get( $url );
+        return $this->_get($url);
     }
 
     /**
@@ -467,9 +518,10 @@ class Webcast
      * @link http://docs.liquidplatform.com/2011/05/reportdetailviews/
      * @access public
      */
-    public function getReportDetailViews() {
+    public function getReportDetailViews()
+    {
         $url = $this->_apiUrl() .'/report/detail/views/?key=' . $this->_api_key;
-        return $this->_get( $url );
+        return $this->_get($url);
     }
 
     /**
@@ -483,19 +535,20 @@ class Webcast
      * @link http://docs.liquidplatform.com/2011/05/reportdetailstorage/
      * @access public
      */
-    public function getReportDetailStorage() {
+    public function getReportDetailStorage()
+    {
         $url = $this->_apiUrl() .'/report/detail/storage/?key=' . $this->_api_key;
-        return $this->_get( $url );
+        return $this->_get($url);
     }
 
     /**
      * Retorna a url já com a versão da api
      * 
-     * @param void
      * @return string $url
-     * @access protected
+     * @access private
      */
-    protected function _apiUrl() {
+    private function _apiUrl()
+    {
         return self::API_DOMAIN . '/'. self::API_VERSION;
     }
 
@@ -503,14 +556,16 @@ class Webcast
      * Converte os parâmetros de 
      * array para query string
      * 
-     * @param array $options
+     * @param array $options (obrigatório)
+     * 
      * @return string $queryStr
-     * @access protected
+     * @access private
      */
-    protected function _toQueryStr( array $options ) {
+    private function _toQueryStr( array $options )
+    {
         $queryStr = '';
         if ( ! empty($options) and is_array($options) ) {
-            foreach( $options as $key => $value ) {
+            foreach ( $options as $key => $value ) {
                 $queryStr .= '&' . $key . '=' . $value;
             }
         }
@@ -520,11 +575,14 @@ class Webcast
     /**
      * Guarda algum valor em memória
      * 
-     * @param string $queryStr
-     * @param $value
+     * @param string $queryStr (obrigatório)
+     * @param mixed  $value    (obrigatório)
+     * 
      * @return true
+     * @access private
      */
-    protected function _setQueryCache( $queryStr, $value ) {
+    private function _setQueryCache( $queryStr, $value )
+    {
         $this->_memoryCache[md5($queryStr)] = $value;
         return true;
     }
@@ -534,14 +592,16 @@ class Webcast
      * ou seja, uma consulta anterior idêntica 
      * retorna da memória
      * 
-     * @param array $queryStr
+     * @param array $queryStr (obrigatório)
+     * 
      * @return mixed array
-     * @access protected
+     * @access private
      */
-    protected function _getQueryCache( $queryStr ) {
-        if ( ! isset($this->_memoryCache[md5($queryStr)]) )
+    private function _getQueryCache( $queryStr )
+    {
+        if ( ! isset($this->_memoryCache[md5($queryStr)]) ) {
             return false;
-            
+        }
         return $this->_memoryCache[md5($queryStr)];
     }
     
@@ -549,20 +609,24 @@ class Webcast
      * Faz a requisição HTTP e obtém a 
      * resposta do servidor
      * 
-     * @param string $queryStr
-     * @param mixed array $post
-     * @access protected
+     * @param string $queryStr (obrigatório)
+     * 
+     * @return object xml or string 
+     * @access private
      */
-    protected function _get( $queryStr , $post = array() ) {
-        if ( ! $xml = $this->_getQueryCache( $queryStr ) ) {
-            $resource = curl_init( $queryStr );
+    private function _get( $queryStr )
+    {
+        if ( ! $xml = $this->_getQueryCache($queryStr) ) {
+            $resource = curl_init($queryStr);
             curl_setopt($resource, CURLOPT_RETURNTRANSFER, true);
             $res = curl_exec($resource);
             curl_close($resource);
             try{
                 /*** validação simples de xml***/
-                if ( ! preg_match("/^\<[.*]*.*[\>]+$/",$res) ) return $res;
-                $xml = new SimpleXMLElement( $res );
+                if ( ! preg_match("/^\<[.*]*.*[\>]+$/", $res) ) {
+                    return $res;
+                }
+                $xml = new SimpleXMLElement($res);
             } catch ( Exception $error ) {
                 return '';
             }
