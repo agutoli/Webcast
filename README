@@ -1,0 +1,54 @@
+
+WEBCAST SAMBATECH
+=====================
+
+Version 1.0 (Agosto de 2011)
+
+Classe para manipulação da api do sistema Webcast da Sambatech feito em
+PHP v5.x.x.
+
+APLICAÇÃO DA CLASSE
+=====================
+
+
+
+<?php
+
+/*** Inclui a classe ***/
+require 'class.Webcast.php';
+
+/**
+ * Instancia a classe passando a chave
+ * de acesso da api
+ */
+$webcast = new Webcast('api_key_here');
+$medias  = $webcast->medias();
+
+?>
+
+
+
+FUNÇÕES DISPONÍVEIS
+=====================
+[1] => debug
+[2] => medias
+[3] => mediasCount
+[4] => mediasRatings
+[5] => mediasViews
+[6] => getMediaById
+[7] => getMediaUrlsByFileId
+[8] => getMediaRatingById
+[9] => getMediaRelatedById
+[10] => getMediaThumbsById
+[11] => getMediaViewsById
+[12] => getMediaUrlsByIdAndOutputName
+[13] => getMediaViewsByIdAndOutputName
+[14] => channels
+[15] => channelsCount
+[16] => getChannelById
+[17] => outputs
+[18] => getReportDetailTraffic
+[19] => getReportDetailMedias
+[20] => getReportDetailViews
+[21] => getReportDetailStorage
+
