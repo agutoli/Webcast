@@ -20,7 +20,7 @@
  * @package  SambaTech_Liquid
  * @author   Bruno Thiago Leite Agutoli <brunotla1@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version  Release: 1.0
+ * @version  Release: 1.2
  * @link     http://docs.liquidplatform.com/
  */
 class Webcast
@@ -146,7 +146,7 @@ class Webcast
         $queryString = $this->_toQueryStr($options);
         $url = $this->_apiUrl() .'/medias/ratings/?key=' . $this->_api_key;
         if ( ! empty($queryString) ) { 
-             $url .= $this->_toQueryStr($options);
+             $url .= $queryString;
         }
         return $this->_get($url);
     }
@@ -171,7 +171,7 @@ class Webcast
         $queryString = $this->_toQueryStr($options);
         $url = $this->_apiUrl() .'/medias/views/?key=' . $this->_api_key;
         if ( ! empty($queryString) ) {
-             $url .= $this->_toQueryStr($options);
+             $url .= $queryString;
         }
         return $this->_get($url);
     }
@@ -195,13 +195,13 @@ class Webcast
      * @link http://docs.liquidplatform.com/2010/09/mediasmediaid/
      * @access public
      */
-    public function getMediaById( $mediaId , $filter = '' ) 
+    public function getMediaById( $mediaId , $filter = array() ) 
     {
-        $queryString = $this->_toQueryStr($options);
+        $queryString = $this->_toQueryStr($filter);
         $url = $this->_apiUrl() .'/medias/'. $mediaId 
                     .'/?key=' . $this->_api_key;
         if ( ! empty($queryString) ) {
-             $url .= $this->_toQueryStr($options);
+             $url .= $queryString;
         }
         return $this->_get($url);
     }
@@ -244,7 +244,7 @@ class Webcast
         $url = $this->_apiUrl() .'/medias/views/'. $mediaFileId 
         			.'/?key=' . $this->_api_key;
         if ( ! empty($queryString) ) 
-             $url .= $this->_toQueryStr($options);
+             $url .= $queryString;
         return $this->_get($url);
     }*/
     
@@ -265,7 +265,7 @@ class Webcast
         $url = $this->_apiUrl() .'/medias/'. $mediaId 
                     .'/rating/?key=' . $this->_api_key;
         if ( ! empty($queryString) ) {
-             $url .= $this->_toQueryStr($options);
+             $url .= $queryString;
         }
         return $this->_get($url);
     }
@@ -290,7 +290,7 @@ class Webcast
         $url = $this->_apiUrl() .'/medias/'. $mediaId 
                     .'/related/?key=' . $this->_api_key;
         if ( ! empty($queryString) ) {
-             $url .= $this->_toQueryStr($options);
+             $url .= $queryString;
         }
         return $this->_get($url);
     }
@@ -314,7 +314,7 @@ class Webcast
         $url = $this->_apiUrl() .'/medias/'. $mediaId 
                     .'/thumbs/?key=' . $this->_api_key;
         if ( ! empty($queryString) ) {
-             $url .= $this->_toQueryStr($options);
+             $url .= $queryString;
         }
         return $this->_get($url);
     }
@@ -385,7 +385,7 @@ class Webcast
         $url = $this->_apiUrl() .'/medias/'. $mediaId 
                    .'/views/'. $outputName .'/?key=' . $this->_api_key;
         if ( ! empty($queryString) ) {
-             $url .= $this->_toQueryStr($options);
+             $url .= $queryString;
         }
         return $this->_get($url);
     }
@@ -407,7 +407,7 @@ class Webcast
         $queryString = $this->_toQueryStr($options);
         $url = $this->_apiUrl() .'/channels/?key=' . $this->_api_key;
         if ( ! empty($queryString) ) {
-             $url .= $this->_toQueryStr($options);
+             $url .= $queryString;
         }
         return $this->_get($url);
     }
@@ -451,7 +451,7 @@ class Webcast
         $url = $this->_apiUrl() .'/channels/'. $channelId 
                     .'/?key=' . $this->_api_key;
         if ( ! empty($queryString) ) {
-             $url .= $this->_toQueryStr($options);
+             $url .= $queryString;
         }
         return $this->_get($url);
     }
